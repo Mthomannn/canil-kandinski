@@ -1,0 +1,62 @@
+{
+  "id": "/",
+  "name": "Canil Kandinski · Criatório de Linhagem",
+  "short_name": "Kandinski",
+  "description": "Canil Kandinski - Criação ética e responsável de Golden Retriever, Bulldog Inglês e Chihuahua em Porto Alegre/RS desde 2010.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F5F5F4",
+  "theme_color": "#1C1917",
+  "categories": ["lifestyle", "shopping", "pets"],
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Filhotes Disponíveis",
+      "short_name": "Filhotes",
+      "description": "Ver filhotes prontos para reserva e entrega",
+      "url": "/#filhotes",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Falar no WhatsApp",
+      "short_name": "WhatsApp",
+      "description": "Atendimento direto com a criadora Daniela",
+      "url": "/#contato",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Painel do Canil",
+      "short_name": "Painel",
+      "description": "Gerenciamento de filhotes e configurações",
+      "url": "/#admin",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}

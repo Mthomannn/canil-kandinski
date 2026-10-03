@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper to validate document IDs
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 64;
+    }
+
+    // Connection test document
+    match /test/{docId} {
+      allow read, write: if isValidId(docId);
+    }
+
+    // Puppies catalog
+    match /puppies/{puppyId} {
+      allow read: if isValidId(puppyId);
+      allow write: if isValidId(puppyId);
+    }
+
+    // Reservations / Orders
+    match /orders/{orderId} {
+      allow read: if isValidId(orderId);
+      allow write: if isValidId(orderId);
+    }
+
+    // Kennel Settings and Contact Info
+    match /settings/{settingId} {
+      allow read: if isValidId(settingId);
+      allow write: if isValidId(settingId);
+    }
+
+    // Notices and Announcements
+    match /notices/{noticeId} {
+      allow read: if isValidId(noticeId);
+      allow write: if isValidId(noticeId);
+    }
+
+    // Customer Testimonials
+    match /testimonials/{testimonialId} {
+      allow read: if isValidId(testimonialId);
+      allow write: if isValidId(testimonialId);
+    }
+
+    // Default deny for everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

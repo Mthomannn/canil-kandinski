@@ -1,0 +1,140 @@
+{
+  "entities": {
+    "Puppy": {
+      "title": "Puppy",
+      "description": "Filhotes do Canil Kandinski com fotos, raça e status",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID único do filhote"
+        },
+        "name": {
+          "type": "string",
+          "description": "Nome ou identificação do filhote"
+        },
+        "breed": {
+          "type": "string",
+          "description": "Raça do filhote"
+        },
+        "gender": {
+          "type": "string",
+          "description": "Sexo do filhote",
+          "enum": ["male", "female"]
+        },
+        "birthDate": {
+          "type": "string",
+          "description": "Data aproximada de nascimento"
+        },
+        "price": {
+          "type": "number",
+          "description": "Valor em reais"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status de disponibilidade",
+          "enum": ["available", "reserved", "sold"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Descrição detalhada do filhote"
+        },
+        "coatColor": {
+          "type": "string",
+          "description": "Pelagem / cor"
+        },
+        "eyeColor": {
+          "type": "string",
+          "description": "Cor dos olhos"
+        },
+        "microchip": {
+          "type": "boolean",
+          "description": "Se já possui microchip implantado"
+        },
+        "vaccinations": {
+          "type": "string",
+          "description": "Histórico de vacinas"
+        },
+        "pedigreeRegistration": {
+          "type": "string",
+          "description": "Registro CBKC / Pedigree"
+        },
+        "featured": {
+          "type": "boolean",
+          "description": "Destaque na página principal"
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Foto principal"
+        },
+        "galleryUrls": {
+          "type": "string",
+          "description": "Fotos adicionais"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Data de cadastro"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Data da última atualização"
+        }
+      },
+      "required": ["id", "name", "breed", "gender", "status", "imageUrl"]
+    },
+    "KennelSettings": {
+      "title": "KennelSettings",
+      "description": "Configurações e informações de contato do Canil Kandinski",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID da configuração"
+        },
+        "whatsapp": {
+          "type": "string",
+          "description": "Número do WhatsApp comercial com DDD"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Telefone de contato"
+        },
+        "email": {
+          "type": "string",
+          "description": "E-mail de atendimento"
+        },
+        "address": {
+          "type": "string",
+          "description": "Cidade / Endereço do canil"
+        },
+        "instagram": {
+          "type": "string",
+          "description": "Perfil do Instagram"
+        },
+        "aboutText": {
+          "type": "string",
+          "description": "Texto institucional sobre o canil"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Data da última alteração"
+        }
+      },
+      "required": ["id", "whatsapp"]
+    }
+  },
+  "firestore": {
+    "/puppies/{puppyId}": {
+      "schema": {
+        "$ref": "#/entities/Puppy"
+      },
+      "description": "Coleção com os filhotes para visualização e gerenciamento"
+    },
+    "/settings/{settingId}": {
+      "schema": {
+        "$ref": "#/entities/KennelSettings"
+      },
+      "description": "Configurações gerais e canais de contato"
+    }
+  }
+}

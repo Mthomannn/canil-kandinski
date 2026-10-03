@@ -1,0 +1,8 @@
+{
+  "name": "Canil Kandinski - Criação Ética & Filhotes de Raça Pura",
+  "description": "Site oficial do Canil Kandinski em Porto Alegre/RS. Especializado em Golden Retriever, Bulldog Inglês e Chihuahua. Filhotes com pedigree CBKC/FCI, checkout simplificado de reserva e painel administrativo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
