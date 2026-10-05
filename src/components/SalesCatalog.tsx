@@ -203,6 +203,8 @@ export const SalesCatalog: React.FC<Props> = ({
                           </>
                         )}
                         <span aria-hidden="true">·</span>
+                        <span>Castrado(a): {dog.neutered || 'Não'}</span>
+                        <span aria-hidden="true">·</span>
                         <span>Microchip OK</span>
                         <span aria-hidden="true">·</span>
                         <span>Pedigree KCRGS</span>

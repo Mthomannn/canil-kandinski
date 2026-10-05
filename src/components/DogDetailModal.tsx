@@ -56,6 +56,7 @@ export const DogDetailModal: React.FC<Props> = ({
               {dog.gender} · {dog.color}
               {dog.coatType ? ` · ${dog.coatType}` : ''}
               {dog.headFormat ? ` · ${dog.headFormat}` : ''}
+              {` · Castrado(a): ${dog.neutered || 'Não'}`}
             </p>
           </div>
         </div>

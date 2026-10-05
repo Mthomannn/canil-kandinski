@@ -351,6 +351,7 @@ export const AdminPortal: React.FC<Props> = ({
       color: 'Creme',
       coatType: 'Pelo Curto',
       headFormat: 'Cabeça de Maçã',
+      neutered: 'Não',
       price: 5800,
       depositAmount: 1000,
       status: 'Disponível',
@@ -877,6 +878,7 @@ export const AdminPortal: React.FC<Props> = ({
                             {dog.gender} · Cor {dog.color}
                             {dog.coatType ? ` · ${dog.coatType}` : ''}
                             {dog.headFormat ? ` · ${dog.headFormat}` : ''}
+                            {` · Castrado(a): ${dog.neutered || 'Não'}`}
                           </p>
                         </div>
                         <div className="text-right">
@@ -1816,7 +1818,7 @@ export const AdminPortal: React.FC<Props> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div>
                   <label className="block font-bold text-[#1C1917] mb-1">Sexo</label>
                   <select
@@ -1831,6 +1833,23 @@ export const AdminPortal: React.FC<Props> = ({
                   >
                     <option value="Macho">Macho</option>
                     <option value="Fêmea">Fêmea</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#1C1917] mb-1">Castrado(a) *</label>
+                  <select
+                    value={editingDog.neutered || 'Não'}
+                    onChange={(e) =>
+                      setEditingDog({
+                        ...editingDog,
+                        neutered: e.target.value as 'Sim' | 'Não',
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl bg-white"
+                  >
+                    <option value="Não">Não</option>
+                    <option value="Sim">Sim</option>
                   </select>
                 </div>
 

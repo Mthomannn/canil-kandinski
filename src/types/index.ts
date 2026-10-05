@@ -17,6 +17,7 @@ export interface Dog {
   color: string;
   coatType?: string; // Ex: Pelo Curto, Pelo Longo, Tipo Urso (Teddy Bear), Tipo Raposa (Fox Face), Tipo Boneca (Doll Face)
   headFormat?: string; // Ex: Cabeça de Maçã, Cabeça de Veado
+  neutered?: 'Sim' | 'Não'; // Castrado(a): Sim ou Não
   price: number; // in BRL
   depositAmount: number; // in BRL (e.g. 1000 for reservation)
   status: DogStatus;
