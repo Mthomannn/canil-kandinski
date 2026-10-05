@@ -780,6 +780,20 @@ export const AdminPortal: React.FC<Props> = ({
                         <span>Trocar Foto</span>
                       </button>
 
+                      <button
+                        type="button"
+                        onClick={() => {
+                          storageService.deleteDog(dog.id);
+                          loadData();
+                          onRefreshData();
+                          showToast(`Filhote "${dog.name}" excluído diretamente!`, 'danger');
+                        }}
+                        className="absolute top-3 right-3 p-2 bg-red-600/90 hover:bg-red-600 text-white rounded-lg shadow-md cursor-pointer transition-all active:scale-95"
+                        title="Exclusão direta deste filhote"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+
                       <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
                         <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white bg-black/60 rounded-md">
                           {dog.breed}
@@ -849,18 +863,18 @@ export const AdminPortal: React.FC<Props> = ({
                       </button>
 
                       <button
-                        onClick={() =>
-                          setDeleteConfirm({
-                            type: 'dog',
-                            id: dog.id,
-                            title: 'Apagar Filhote',
-                            message: `Deseja realmente apagar o filhote "${dog.name}" do site? Esta ação removerá o cãozinho do catálogo.`,
-                          })
-                        }
-                        className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
-                        title="Apagar este filhote"
+                        type="button"
+                        onClick={() => {
+                          storageService.deleteDog(dog.id);
+                          loadData();
+                          onRefreshData();
+                          showToast(`Filhote "${dog.name}" excluído diretamente!`, 'danger');
+                        }}
+                        className="px-2.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-lg border border-red-200 flex items-center gap-1 cursor-pointer transition-colors"
+                        title="Excluir este filhote diretamente"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Excluir</span>
                       </button>
                     </div>
                   </div>
@@ -1070,17 +1084,17 @@ export const AdminPortal: React.FC<Props> = ({
                         </button>
                         <button
                           type="button"
-                          onClick={() =>
-                            setDeleteConfirm({
-                              type: 'pillar',
-                              index: idx,
-                              title: 'Apagar Garantia',
-                              message: `Deseja remover "${pillar.title}" da lista de garantias?`,
-                            })
-                          }
-                          className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                          onClick={() => {
+                            const currentPillars = formConfig.aboutPillars || [];
+                            const updated = currentPillars.filter((_, i) => i !== idx);
+                            updateConfigValue({ aboutPillars: updated });
+                            showToast(`Garantia "${pillar.title}" excluída diretamente!`, 'danger');
+                          }}
+                          className="px-2.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-lg border border-red-200 flex items-center gap-1 cursor-pointer transition-colors text-[11px]"
+                          title="Excluir garantia diretamente"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Excluir</span>
                         </button>
                       </div>
                     </div>
@@ -1177,9 +1191,31 @@ export const AdminPortal: React.FC<Props> = ({
                     2. Fotos das Raças Selecionadas ({breeds.length} raças)
                   </h3>
                   <p className="text-[#78716C]">
-                    Altere aqui as fotos da seção <strong>"Raças Selecionadas com Rigor Genético"</strong> (Golden Retriever, Bulldog Inglês e Chihuahua) no mesmo padrão da aba Filhotes.
+                    Altere ou exclua aqui as fotos da seção <strong>"Raças Selecionadas com Rigor Genético"</strong> no mesmo padrão da aba Filhotes.
                   </p>
                 </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setEditingBreed({
+                      id: '',
+                      name: '',
+                      tagline: 'Padrão CBKC / FCI',
+                      description: 'Criação selecionada com rigor genético, saúde e temperamento equilibrado.',
+                      traits: [
+                        'Temperamento dócil e equilibrado',
+                        'Pais com controle genético rigoroso',
+                        'Socialização precoce assistida',
+                      ],
+                      idealFor: 'Famílias, casas ou apartamentos com acompanhamento dedicado.',
+                      image: kennelImages.golden1,
+                    })
+                  }
+                  className="px-5 py-3 text-xs font-bold text-white bg-[#059669] hover:bg-[#047857] rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md active:scale-95 shrink-0"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>+ Cadastrar Nova Raça</span>
+                </button>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -1203,6 +1239,19 @@ export const AdminPortal: React.FC<Props> = ({
                           <Camera className="w-3.5 h-3.5 text-amber-400" />
                           <span>Trocar Foto</span>
                         </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            storageService.deleteBreed(breed.id);
+                            setBreeds(storageService.getBreeds());
+                            onRefreshData();
+                            showToast(`Raça "${breed.name}" excluída diretamente!`, 'danger');
+                          }}
+                          className="absolute top-3 right-3 p-2 bg-red-600/90 hover:bg-red-600 text-white rounded-lg shadow-md cursor-pointer transition-all active:scale-95"
+                          title="Exclusão direta desta raça"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
                         <div className="absolute top-3 left-3">
                           <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white bg-black/60 rounded-md">
                             {breed.name}
@@ -1223,10 +1272,25 @@ export const AdminPortal: React.FC<Props> = ({
                       <button
                         type="button"
                         onClick={() => setEditingBreed({ ...breed })}
-                        className="w-full py-2.5 px-4 bg-[#059669] hover:bg-[#047857] text-white font-bold rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-sm active:scale-95"
+                        className="flex-1 py-2 px-3 bg-[#059669] hover:bg-[#047857] text-white font-bold rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-sm active:scale-95"
                       >
                         <Edit2 className="w-3.5 h-3.5" />
-                        <span>+ Alterar Foto / Editar {breed.name}</span>
+                        <span>Alterar Foto / Editar</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          storageService.deleteBreed(breed.id);
+                          setBreeds(storageService.getBreeds());
+                          onRefreshData();
+                          showToast(`Raça "${breed.name}" excluída diretamente!`, 'danger');
+                        }}
+                        className="py-2 px-3 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-xl border border-red-200 flex items-center justify-center gap-1 cursor-pointer transition-all active:scale-95 shrink-0"
+                        title="Excluir diretamente"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Excluir</span>
                       </button>
                     </div>
                   </div>
@@ -1285,6 +1349,20 @@ export const AdminPortal: React.FC<Props> = ({
                           <span>Trocar Foto</span>
                         </button>
 
+                        <button
+                          type="button"
+                          onClick={() => {
+                            storageService.deletePhoto(photo.id);
+                            loadData();
+                            onRefreshData();
+                            showToast(`Foto "${photo.title}" excluída diretamente!`, 'danger');
+                          }}
+                          className="absolute top-3 right-3 p-2 bg-red-600/90 hover:bg-red-600 text-white rounded-lg shadow-md cursor-pointer transition-all active:scale-95"
+                          title="Exclusão direta desta foto"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+
                         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
                           <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white bg-black/60 rounded-md">
                             {photo.category}
@@ -1330,18 +1408,17 @@ export const AdminPortal: React.FC<Props> = ({
 
                         <button
                           type="button"
-                          onClick={() =>
-                            setDeleteConfirm({
-                              type: 'photo',
-                              id: photo.id,
-                              title: 'Apagar Foto',
-                              message: `Deseja realmente apagar a foto "${photo.title}" da galeria?`,
-                            })
-                          }
-                          className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
-                          title="Apagar esta foto"
+                          onClick={() => {
+                            storageService.deletePhoto(photo.id);
+                            loadData();
+                            onRefreshData();
+                            showToast(`Foto "${photo.title}" excluída diretamente!`, 'danger');
+                          }}
+                          className="px-2.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-lg border border-red-200 flex items-center gap-1 cursor-pointer transition-colors"
+                          title="Excluir esta foto diretamente"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Excluir</span>
                         </button>
                       </div>
                     </div>
@@ -2106,11 +2183,23 @@ export const AdminPortal: React.FC<Props> = ({
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                storageService.updateBreed(editingBreed.id, editingBreed);
+                if (editingBreed.id) {
+                  storageService.updateBreed(editingBreed.id, editingBreed);
+                  showToast(`Foto de ${editingBreed.name} atualizada em todos os aparelhos!`);
+                } else {
+                  storageService.addBreed({
+                    name: editingBreed.name || 'Nova Raça',
+                    tagline: editingBreed.tagline || 'Padrão CBKC / FCI',
+                    description: editingBreed.description || '',
+                    traits: editingBreed.traits || ['Linhagem selecionada com rigor genético'],
+                    idealFor: editingBreed.idealFor || 'Famílias e tutores dedicados.',
+                    image: editingBreed.image || kennelImages.golden1,
+                  });
+                  showToast(`Nova raça "${editingBreed.name}" cadastrada com sucesso!`);
+                }
                 setBreeds(storageService.getBreeds());
                 onRefreshData();
                 setEditingBreed(null);
-                showToast(`Foto de ${editingBreed.name} atualizada em todos os aparelhos!`);
               }}
               className="space-y-4 text-xs"
             >
