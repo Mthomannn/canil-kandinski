@@ -9,6 +9,7 @@ import {
   DogStatus,
   GalleryPhoto,
   HistoryMilestone,
+  BreedInfo,
 } from '../../types';
 import { storageService } from '../../services/storageService';
 import { kennelImages } from '../../assets/images';
@@ -72,6 +73,7 @@ export const AdminPortal: React.FC<Props> = ({
   const [dogs, setDogs] = useState<Dog[]>([]);
   const [orders, setOrders] = useState<ReservationOrder[]>([]);
   const [gallery, setGallery] = useState<GalleryPhoto[]>([]);
+  const [breeds, setBreeds] = useState<BreedInfo[]>([]);
   const [milestones, setMilestones] = useState<HistoryMilestone[]>([]);
 
   // Search & Filter for Dogs
@@ -94,6 +96,7 @@ export const AdminPortal: React.FC<Props> = ({
     title: string;
     desc: string;
   } | null>(null);
+  const [editingBreed, setEditingBreed] = useState<BreedInfo | null>(null);
 
   // Delete Confirmation Modal
   const [deleteConfirm, setDeleteConfirm] = useState<{
@@ -131,6 +134,7 @@ export const AdminPortal: React.FC<Props> = ({
     setDogs(storageService.getDogs());
     setOrders(storageService.getOrders());
     setGallery(storageService.getGallery());
+    setBreeds(storageService.getBreeds());
     setMilestones(currentCfg.historyMilestones || []);
   };
 
@@ -1165,12 +1169,77 @@ export const AdminPortal: React.FC<Props> = ({
               </div>
             </div>
 
-            {/* 2. Galeria Geral de Fotos - Exatamente igual à Aba Filhotes */}
+            {/* 2. Fotos das Raças Selecionadas (Golden Retriever, Bulldog Inglês e Chihuahua) */}
             <div className="bg-white rounded-2xl border border-[#E7E5E4] p-6 shadow-xs space-y-5 text-xs">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E7E5E4]">
                 <div>
                   <h3 className="text-base font-bold text-[#1C1917]">
-                    2. Fotos da Galeria & Redes Sociais ({gallery.length} fotos)
+                    2. Fotos das Raças Selecionadas ({breeds.length} raças)
+                  </h3>
+                  <p className="text-[#78716C]">
+                    Altere aqui as fotos da seção <strong>"Raças Selecionadas com Rigor Genético"</strong> (Golden Retriever, Bulldog Inglês e Chihuahua) no mesmo padrão da aba Filhotes.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {breeds.map((breed) => (
+                  <div
+                    key={breed.id}
+                    className="bg-white rounded-2xl border border-[#E7E5E4] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="relative aspect-[4/3] bg-stone-100 overflow-hidden group">
+                        <img
+                          src={breed.image}
+                          alt={breed.name}
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setEditingBreed({ ...breed })}
+                          className="absolute bottom-3 right-3 px-3 py-1.5 bg-[#1C1917]/90 hover:bg-[#1C1917] text-white text-[11px] font-bold rounded-lg backdrop-blur-xs flex items-center gap-1.5 cursor-pointer shadow-md transition-all active:scale-95"
+                        >
+                          <Camera className="w-3.5 h-3.5 text-amber-400" />
+                          <span>Trocar Foto</span>
+                        </button>
+                        <div className="absolute top-3 left-3">
+                          <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white bg-black/60 rounded-md">
+                            {breed.name}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="p-4 space-y-2 text-xs">
+                        <h4 className="text-base font-bold text-[#1C1917]">{breed.name}</h4>
+                        <p className="text-[#854D0E] font-medium text-[11px]">{breed.tagline}</p>
+                        <p className="text-[#57534E] text-[11px] line-clamp-2 bg-[#FAFAF9] p-2.5 rounded-lg border border-[#F5F5F4]">
+                          {breed.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-4 pt-3 border-t border-[#F5F5F4] flex items-center justify-between gap-2 text-xs">
+                      <button
+                        type="button"
+                        onClick={() => setEditingBreed({ ...breed })}
+                        className="w-full py-2.5 px-4 bg-[#059669] hover:bg-[#047857] text-white font-bold rounded-xl flex items-center justify-center gap-1.5 cursor-pointer transition-all shadow-sm active:scale-95"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                        <span>+ Alterar Foto / Editar {breed.name}</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 3. Galeria Geral de Fotos - Exatamente igual à Aba Filhotes */}
+            <div className="bg-white rounded-2xl border border-[#E7E5E4] p-6 shadow-xs space-y-5 text-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E7E5E4]">
+                <div>
+                  <h3 className="text-base font-bold text-[#1C1917]">
+                    3. Fotos da Galeria & Redes Sociais ({gallery.length} fotos)
                   </h3>
                   <p className="text-[#78716C]">
                     Funciona exatamente igual à aba Filhotes: clique em <strong>"+ Cadastrar Nova Foto"</strong>, em <strong>"Trocar Foto"</strong> na imagem ou em <strong>"Editar"</strong> para selecionar a pasta onde está a foto.
@@ -2010,6 +2079,125 @@ export const AdminPortal: React.FC<Props> = ({
                   className="px-6 py-2.5 text-xs font-bold text-white bg-[#059669] hover:bg-[#047857] rounded-xl cursor-pointer shadow-md"
                 >
                   Salvar Garantia
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ================= MODAL: ALTERAR FOTO E DADOS DA RAÇA (IGUAL AO FILHOTE) ================= */}
+      {editingBreed && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-xs overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-[#E7E5E4] my-6">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E7E5E4] mb-4">
+              <h3 className="text-base font-bold text-[#1C1917]">
+                Alterar Foto da Raça: {editingBreed.name}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setEditingBreed(null)}
+                className="p-1.5 text-[#78716C] hover:text-[#1C1917] rounded-lg cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                storageService.updateBreed(editingBreed.id, editingBreed);
+                setBreeds(storageService.getBreeds());
+                onRefreshData();
+                setEditingBreed(null);
+                showToast(`Foto de ${editingBreed.name} atualizada em todos os aparelhos!`);
+              }}
+              className="space-y-4 text-xs"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-[#1C1917] mb-1">
+                    Nome da Raça *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editingBreed.name || ''}
+                    onChange={(e) => setEditingBreed({ ...editingBreed, name: e.target.value })}
+                    className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#1C1917] mb-1">
+                    Frase de Destaque *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editingBreed.tagline || ''}
+                    onChange={(e) => setEditingBreed({ ...editingBreed, tagline: e.target.value })}
+                    className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-[#1C1917] mb-1">
+                  Foto da Raça (URL ou Carregar do Celular)
+                </label>
+                <div className="space-y-2">
+                  <input
+                    type="text"
+                    placeholder="Cole o link da foto..."
+                    value={editingBreed.image || ''}
+                    onChange={(e) => setEditingBreed({ ...editingBreed, image: e.target.value })}
+                    className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl font-mono text-[11px]"
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const dataUrl = await compressImageFile(file, 1000, 0.78);
+                      if (dataUrl) {
+                        setEditingBreed({
+                          ...editingBreed,
+                          image: dataUrl,
+                        });
+                      }
+                    }}
+                    className="block w-full text-xs text-[#78716C] file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#1C1917] file:text-white cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-[#1C1917] mb-1">
+                  Descrição da Raça
+                </label>
+                <textarea
+                  rows={3}
+                  value={editingBreed.description || ''}
+                  onChange={(e) => setEditingBreed({ ...editingBreed, description: e.target.value })}
+                  className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-[#E7E5E4] flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingBreed(null)}
+                  className="px-4 py-2 text-xs font-semibold text-[#57534E] hover:bg-[#F5F5F4] rounded-xl cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 text-xs font-bold text-white bg-[#059669] hover:bg-[#047857] rounded-xl cursor-pointer shadow-md"
+                >
+                  Salvar Foto da Raça
                 </button>
               </div>
             </form>
