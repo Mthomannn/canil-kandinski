@@ -84,6 +84,16 @@ export const AdminPortal: React.FC<Props> = ({
   const [editingPhoto, setEditingPhoto] = useState<Partial<GalleryPhoto> | null>(null);
   const [isAddPhotoModalOpen, setIsAddPhotoModalOpen] = useState(false);
   const [isAddMilestoneModalOpen, setIsAddMilestoneModalOpen] = useState(false);
+  const [singlePhotoModal, setSinglePhotoModal] = useState<{
+    type: 'hero' | 'about';
+    title: string;
+    imageUrl: string;
+  } | null>(null);
+  const [pillarModal, setPillarModal] = useState<{
+    index?: number;
+    title: string;
+    desc: string;
+  } | null>(null);
 
   // Delete Confirmation Modal
   const [deleteConfirm, setDeleteConfirm] = useState<{
@@ -934,11 +944,33 @@ export const AdminPortal: React.FC<Props> = ({
                 />
               </div>
 
-              {/* Foto das Instalações com Seleção de Caminho igual à aba Filhotes */}
-              <div className="pt-4 border-t border-[#E7E5E4]">
-                <label className="block font-bold text-[#1C1917] mb-2">
-                  Foto do Canil e Instalações (Exibida na História)
-                </label>
+              {/* Foto das Instalações com o MESMO padrão da aba Filhotes */}
+              <div className="pt-4 border-t border-[#E7E5E4] space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <label className="block font-bold text-[#1C1917] text-sm">
+                      Foto do Canil e Instalações (Exibida na História)
+                    </label>
+                    <span className="text-[#78716C] text-[11px]">
+                      Clique no botão verde ou selecione o arquivo abaixo (mesmo padrão da aba Filhotes).
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setSinglePhotoModal({
+                        type: 'about',
+                        title: 'Alterar Foto do Canil e Instalações',
+                        imageUrl: formConfig.aboutImage || '',
+                      })
+                    }
+                    className="px-5 py-2.5 text-xs font-bold text-white bg-[#059669] hover:bg-[#047857] rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md active:scale-95 shrink-0"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>+ Alterar / Inserir Foto do Canil</span>
+                  </button>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center bg-[#FAFAF9] p-4 rounded-2xl border border-[#E7E5E4]">
                   <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-stone-200 border border-[#D6D3D1] group">
                     <img
@@ -948,7 +980,13 @@ export const AdminPortal: React.FC<Props> = ({
                     />
                     <button
                       type="button"
-                      onClick={() => aboutFileRef.current?.click()}
+                      onClick={() =>
+                        setSinglePhotoModal({
+                          type: 'about',
+                          title: 'Alterar Foto do Canil e Instalações',
+                          imageUrl: formConfig.aboutImage || '',
+                        })
+                      }
                       className="absolute bottom-3 right-3 px-3 py-1.5 bg-[#1C1917]/90 hover:bg-[#1C1917] text-white text-[11px] font-bold rounded-lg backdrop-blur-xs flex items-center gap-1.5 cursor-pointer shadow-md transition-all active:scale-95"
                     >
                       <Camera className="w-3.5 h-3.5 text-amber-400" />
@@ -956,37 +994,31 @@ export const AdminPortal: React.FC<Props> = ({
                     </button>
                   </div>
                   <div className="space-y-3">
-                    <p className="text-[#57534E] text-xs">
-                      Selecione abaixo o caminho onde está a foto no seu computador ou celular (igual à aba Filhotes):
-                    </p>
                     <div>
-                      <label className="block font-bold text-[#1C1917] mb-1 text-[11px]">
-                        Selecionar Arquivo da Foto no Computador / Celular:
+                      <label className="block font-bold text-[#1C1917] mb-1">
+                        Foto do Canil (URL ou Carregar do Celular)
                       </label>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleUploadAboutImage}
-                        className="block w-full text-xs text-[#78716C] file:mr-2 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#1C1917] file:text-white cursor-pointer bg-white p-2 rounded-xl border border-[#D6D3D1]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-bold text-[#1C1917] mb-1 text-[11px]">
-                        Ou Caminho / Link da Foto:
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Cole o link ou selecione o arquivo acima..."
-                        value={formConfig.aboutImage || ''}
-                        onChange={(e) => updateConfigValue({ aboutImage: e.target.value })}
-                        className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl font-mono text-[11px] bg-white"
-                      />
+                      <div className="space-y-2">
+                        <input
+                          type="text"
+                          placeholder="Cole o link da foto..."
+                          value={formConfig.aboutImage || ''}
+                          onChange={(e) => updateConfigValue({ aboutImage: e.target.value })}
+                          className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl font-mono text-[11px] bg-white"
+                        />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleUploadAboutImage}
+                          className="block w-full text-xs text-[#78716C] file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#1C1917] file:text-white cursor-pointer"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Garantias Oficiais */}
+              {/* Garantias Oficiais (Com Modal igual à aba Filhotes) */}
               <div className="pt-4 border-t border-[#E7E5E4] space-y-3">
                 <div className="flex items-center justify-between">
                   <label className="block font-bold text-[#1C1917]">
@@ -994,17 +1026,16 @@ export const AdminPortal: React.FC<Props> = ({
                   </label>
                   <button
                     type="button"
-                    onClick={() => {
-                      const title = window.prompt('Digite o título da garantia (Ex: Acompanhamento Semanal):');
-                      if (!title) return;
-                      const desc = window.prompt('Digite a descrição da garantia:') || '';
-                      const current = formConfig.aboutPillars || [];
-                      updateConfigValue({ aboutPillars: [...current, { title, desc }] });
-                    }}
-                    className="px-3 py-1.5 bg-[#059669] hover:bg-[#047857] text-white rounded-lg font-bold text-[11px] cursor-pointer flex items-center gap-1"
+                    onClick={() =>
+                      setPillarModal({
+                        title: '',
+                        desc: '',
+                      })
+                    }
+                    className="px-4 py-2 bg-[#059669] hover:bg-[#047857] text-white rounded-xl font-bold text-xs cursor-pointer flex items-center gap-1.5 shadow-sm active:scale-95 transition-all"
                   >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Adicionar Garantia</span>
+                    <Plus className="w-4 h-4" />
+                    <span>+ Adicionar Garantia</span>
                   </button>
                 </div>
 
@@ -1018,20 +1049,36 @@ export const AdminPortal: React.FC<Props> = ({
                         <strong className="block text-[#1C1917]">{pillar.title}</strong>
                         <span className="text-[#57534E] text-[11px]">{pillar.desc}</span>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setDeleteConfirm({
-                            type: 'pillar',
-                            index: idx,
-                            title: 'Apagar Garantia',
-                            message: `Deseja remover "${pillar.title}" da lista de garantias?`,
-                          })
-                        }
-                        className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setPillarModal({
+                              index: idx,
+                              title: pillar.title,
+                              desc: pillar.desc,
+                            })
+                          }
+                          className="px-2.5 py-1.5 bg-white hover:bg-[#E7E5E4] text-[#1C1917] font-semibold rounded-lg border border-[#D6D3D1] flex items-center gap-1 cursor-pointer transition-colors text-[11px]"
+                        >
+                          <Edit2 className="w-3 h-3" />
+                          <span>Editar</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setDeleteConfirm({
+                              type: 'pillar',
+                              index: idx,
+                              title: 'Apagar Garantia',
+                              message: `Deseja remover "${pillar.title}" da lista de garantias?`,
+                            })
+                          }
+                          className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg cursor-pointer"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -1051,16 +1098,22 @@ export const AdminPortal: React.FC<Props> = ({
                     1. Foto de Capa do Topo do Site
                   </h3>
                   <p className="text-[#78716C]">
-                    Clique em "Trocar Foto" na imagem ou selecione o caminho onde está a foto no seu computador/celular abaixo.
+                    Clique no botão verde ou selecione o arquivo abaixo (mesmo padrão da aba Filhotes).
                   </p>
                 </div>
                 <button
                   type="button"
-                  onClick={() => heroFileRef.current?.click()}
-                  className="px-4 py-2.5 bg-[#1C1917] hover:bg-[#292524] text-white font-bold rounded-xl flex items-center gap-2 cursor-pointer shadow-sm active:scale-95 shrink-0"
+                  onClick={() =>
+                    setSinglePhotoModal({
+                      type: 'hero',
+                      title: 'Alterar Foto de Capa do Topo',
+                      imageUrl: formConfig.heroImage || '',
+                    })
+                  }
+                  className="px-5 py-3 text-xs font-bold text-white bg-[#059669] hover:bg-[#047857] rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md active:scale-95 shrink-0"
                 >
-                  <Camera className="w-4 h-4 text-amber-400" />
-                  <span>Trocar Foto de Capa</span>
+                  <Plus className="w-4 h-4" />
+                  <span>+ Alterar / Inserir Foto de Capa</span>
                 </button>
               </div>
 
@@ -1073,7 +1126,13 @@ export const AdminPortal: React.FC<Props> = ({
                   />
                   <button
                     type="button"
-                    onClick={() => heroFileRef.current?.click()}
+                    onClick={() =>
+                      setSinglePhotoModal({
+                        type: 'hero',
+                        title: 'Alterar Foto de Capa do Topo',
+                        imageUrl: formConfig.heroImage || '',
+                      })
+                    }
                     className="absolute bottom-3 right-3 px-3 py-1.5 bg-[#1C1917]/90 hover:bg-[#1C1917] text-white text-[11px] font-bold rounded-lg backdrop-blur-xs flex items-center gap-1.5 cursor-pointer shadow-md transition-all active:scale-95"
                   >
                     <Camera className="w-3.5 h-3.5 text-amber-400" />
@@ -1084,26 +1143,23 @@ export const AdminPortal: React.FC<Props> = ({
                 <div className="space-y-3">
                   <div>
                     <label className="block font-bold text-[#1C1917] mb-1">
-                      Selecionar Caminho da Foto (Computador ou Celular):
+                      Foto de Capa (URL ou Carregar do Celular)
                     </label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleUploadHeroImage}
-                      className="block w-full text-xs text-[#78716C] file:mr-2 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#1C1917] file:text-white cursor-pointer bg-white p-2 rounded-xl border border-[#D6D3D1]"
-                    />
-                  </div>
-                  <div>
-                    <label className="block font-bold text-[#1C1917] mb-1">
-                      Ou Caminho / Link da Foto:
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Cole o link da foto ou selecione o arquivo acima..."
-                      value={formConfig.heroImage || ''}
-                      onChange={(e) => updateConfigValue({ heroImage: e.target.value })}
-                      className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl font-mono text-[11px] bg-white"
-                    />
+                    <div className="space-y-2">
+                      <input
+                        type="text"
+                        placeholder="Cole o link da foto..."
+                        value={formConfig.heroImage || ''}
+                        onChange={(e) => updateConfigValue({ heroImage: e.target.value })}
+                        className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl font-mono text-[11px] bg-white"
+                      />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleUploadHeroImage}
+                        className="block w-full text-xs text-[#78716C] file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#1C1917] file:text-white cursor-pointer"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1781,6 +1837,179 @@ export const AdminPortal: React.FC<Props> = ({
                   className="px-6 py-2.5 text-xs font-bold text-white bg-[#059669] hover:bg-[#047857] rounded-xl cursor-pointer shadow-md"
                 >
                   Salvar Foto
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ================= MODAL: ALTERAR FOTO DE CAPA OU FOTO DO CANIL (IGUAL AO FILHOTE) ================= */}
+      {singlePhotoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-xs overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-[#E7E5E4] my-6">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E7E5E4] mb-4">
+              <h3 className="text-base font-bold text-[#1C1917]">{singlePhotoModal.title}</h3>
+              <button
+                type="button"
+                onClick={() => setSinglePhotoModal(null)}
+                className="p-1.5 text-[#78716C] hover:text-[#1C1917] rounded-lg cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (singlePhotoModal.type === 'hero') {
+                  updateConfigValue({ heroImage: singlePhotoModal.imageUrl });
+                  showToast('Foto de Capa atualizada em todos os aparelhos!');
+                } else {
+                  updateConfigValue({ aboutImage: singlePhotoModal.imageUrl });
+                  showToast('Foto do Canil atualizada em todos os aparelhos!');
+                }
+                setSinglePhotoModal(null);
+              }}
+              className="space-y-4 text-xs"
+            >
+              <div>
+                <label className="block font-bold text-[#1C1917] mb-1">
+                  Foto (URL ou Carregar do Celular)
+                </label>
+                <div className="space-y-2">
+                  <input
+                    type="text"
+                    placeholder="Cole o link da foto..."
+                    value={singlePhotoModal.imageUrl || ''}
+                    onChange={(e) =>
+                      setSinglePhotoModal({
+                        ...singlePhotoModal,
+                        imageUrl: e.target.value,
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl font-mono text-[11px]"
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const dataUrl = await compressImageFile(file, 1100, 0.76);
+                      if (dataUrl) {
+                        setSinglePhotoModal({
+                          ...singlePhotoModal,
+                          imageUrl: dataUrl,
+                        });
+                      }
+                    }}
+                    className="block w-full text-xs text-[#78716C] file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#1C1917] file:text-white cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-[#E7E5E4] flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSinglePhotoModal(null)}
+                  className="px-4 py-2 text-xs font-semibold text-[#57534E] hover:bg-[#F5F5F4] rounded-xl cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 text-xs font-bold text-white bg-[#059669] hover:bg-[#047857] rounded-xl cursor-pointer shadow-md"
+                >
+                  Salvar Foto
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ================= MODAL: ADICIONAR OU EDITAR GARANTIA (SEM WINDOW.PROMPT) ================= */}
+      {pillarModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-xs overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-[#E7E5E4] my-6">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E7E5E4] mb-4">
+              <h3 className="text-base font-bold text-[#1C1917]">
+                {pillarModal.index !== undefined ? 'Editar Garantia' : 'Cadastrar Nova Garantia'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setPillarModal(null)}
+                className="p-1.5 text-[#78716C] hover:text-[#1C1917] rounded-lg cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!pillarModal.title.trim()) return;
+                const current = [...(formConfig.aboutPillars || [])];
+                if (pillarModal.index !== undefined) {
+                  current[pillarModal.index] = {
+                    title: pillarModal.title.trim(),
+                    desc: pillarModal.desc.trim(),
+                  };
+                  showToast('Garantia atualizada com sucesso!');
+                } else {
+                  current.push({
+                    title: pillarModal.title.trim(),
+                    desc: pillarModal.desc.trim(),
+                  });
+                  showToast('Nova garantia adicionada com sucesso!');
+                }
+                updateConfigValue({ aboutPillars: current });
+                setPillarModal(null);
+              }}
+              className="space-y-4 text-xs"
+            >
+              <div>
+                <label className="block font-bold text-[#1C1917] mb-1">
+                  Título da Garantia *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Ex: Transparência & Acompanhamento"
+                  value={pillarModal.title}
+                  onChange={(e) => setPillarModal({ ...pillarModal, title: e.target.value })}
+                  className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-[#1C1917] mb-1">
+                  Descrição da Garantia *
+                </label>
+                <textarea
+                  rows={3}
+                  required
+                  placeholder="Ex: Os futuros tutores recebem fotos, vídeos e atualizações semanais..."
+                  value={pillarModal.desc}
+                  onChange={(e) => setPillarModal({ ...pillarModal, desc: e.target.value })}
+                  className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-[#E7E5E4] flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPillarModal(null)}
+                  className="px-4 py-2 text-xs font-semibold text-[#57534E] hover:bg-[#F5F5F4] rounded-xl cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 text-xs font-bold text-white bg-[#059669] hover:bg-[#047857] rounded-xl cursor-pointer shadow-md"
+                >
+                  Salvar Garantia
                 </button>
               </div>
             </form>
