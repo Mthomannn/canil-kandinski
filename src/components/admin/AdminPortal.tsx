@@ -46,6 +46,54 @@ import {
   Download,
 } from 'lucide-react';
 
+const CHIHUAHUA_COLORS = [
+  'Preto',
+  'Branco',
+  'Creme',
+  'Fulvo',
+  'Chocolate',
+  'Vermelho',
+  'Azul',
+  'Prateado',
+  'Dourado',
+  'Preto e Castanho',
+  'Azul e Castanho',
+  'Chocolate e Castanho',
+  'Fawn e Branco',
+  'Preto e Branco',
+  'Azul e Branco',
+  'Chocolate e Branco',
+  'Vermelho e Branco',
+  'Creme e Branco',
+  'Ouro e Branco',
+  'Trigrado',
+  'Sable',
+  'Merle',
+];
+
+const CHIHUAHUA_COAT_TYPES = ['Pelo Curto', 'Pelo Longo'];
+
+const CHIHUAHUA_HEAD_FORMATS = ['Cabeça de Maçã', 'Cabeça de Veado'];
+
+const LULU_COLORS = [
+  'Laranja',
+  'Branco',
+  'Preto',
+  'Marrom (Chocolate)',
+  'Creme',
+  'Vermelho',
+  'Azul',
+  'Wolf Sable',
+  'Parti-color',
+  'Beaver',
+];
+
+const LULU_TYPES = [
+  'Tipo Urso (Teddy Bear)',
+  'Tipo Raposa (Fox Face)',
+  'Tipo Boneca (Doll Face)',
+];
+
 interface Props {
   config: KennelConfig;
   onCloseAdmin: () => void;
@@ -296,11 +344,13 @@ export const AdminPortal: React.FC<Props> = ({
   const handleOpenNewDog = () => {
     setEditingDog({
       name: '',
-      breed: 'Golden Retriever',
+      breed: 'Chihuahua',
       gender: 'Macho',
       birthDate: new Date().toISOString().split('T')[0],
       readyDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      color: 'Dourado',
+      color: 'Creme',
+      coatType: 'Pelo Curto',
+      headFormat: 'Cabeça de Maçã',
       price: 5800,
       depositAmount: 1000,
       status: 'Disponível',
@@ -738,7 +788,13 @@ export const AdminPortal: React.FC<Props> = ({
               />
 
               <div className="flex items-center gap-1.5 overflow-x-auto text-xs">
-                {['all', 'Golden Retriever', 'Bulldog Inglês', 'Chihuahua'].map((breed) => (
+                {[
+                  'all',
+                  'Chihuahua',
+                  'Lulu da Pomerânia (Spitz Alemão)',
+                  'Golden Retriever',
+                  'Bulldog Inglês',
+                ].map((breed) => (
                   <button
                     key={breed}
                     onClick={() => setBreedFilter(breed)}
@@ -819,6 +875,8 @@ export const AdminPortal: React.FC<Props> = ({
                           <h3 className="text-base font-bold text-[#1C1917]">{dog.name}</h3>
                           <p className="text-[#78716C] text-[11px]">
                             {dog.gender} · Cor {dog.color}
+                            {dog.coatType ? ` · ${dog.coatType}` : ''}
+                            {dog.headFormat ? ` · ${dog.headFormat}` : ''}
                           </p>
                         </div>
                         <div className="text-right">
@@ -1707,18 +1765,53 @@ export const AdminPortal: React.FC<Props> = ({
                 <div>
                   <label className="block font-bold text-[#1C1917] mb-1">Raça *</label>
                   <select
-                    value={editingDog.breed || 'Golden Retriever'}
-                    onChange={(e) =>
-                      setEditingDog({
-                        ...editingDog,
-                        breed: e.target.value as DogBreed,
-                      })
-                    }
+                    value={editingDog.breed || 'Chihuahua'}
+                    onChange={(e) => {
+                      const newBreed = e.target.value as DogBreed;
+                      const lower = newBreed.toLowerCase();
+                      if (lower.includes('chihuahua')) {
+                        setEditingDog({
+                          ...editingDog,
+                          breed: newBreed,
+                          color: CHIHUAHUA_COLORS.includes(editingDog.color || '')
+                            ? editingDog.color
+                            : 'Creme',
+                          coatType: CHIHUAHUA_COAT_TYPES.includes(editingDog.coatType || '')
+                            ? editingDog.coatType
+                            : 'Pelo Curto',
+                          headFormat: CHIHUAHUA_HEAD_FORMATS.includes(editingDog.headFormat || '')
+                            ? editingDog.headFormat
+                            : 'Cabeça de Maçã',
+                        });
+                      } else if (lower.includes('lulu') || lower.includes('spitz')) {
+                        setEditingDog({
+                          ...editingDog,
+                          breed: newBreed,
+                          color: LULU_COLORS.includes(editingDog.color || '')
+                            ? editingDog.color
+                            : 'Laranja',
+                          coatType: LULU_TYPES.includes(editingDog.coatType || '')
+                            ? editingDog.coatType
+                            : 'Tipo Urso (Teddy Bear)',
+                          headFormat: '',
+                        });
+                      } else {
+                        setEditingDog({
+                          ...editingDog,
+                          breed: newBreed,
+                          coatType: '',
+                          headFormat: '',
+                        });
+                      }
+                    }}
                     className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl bg-white"
                   >
+                    <option value="Chihuahua">Chihuahua</option>
+                    <option value="Lulu da Pomerânia (Spitz Alemão)">
+                      Lulu da Pomerânia (Spitz Alemão)
+                    </option>
                     <option value="Golden Retriever">Golden Retriever</option>
                     <option value="Bulldog Inglês">Bulldog Inglês</option>
-                    <option value="Chihuahua">Chihuahua</option>
                   </select>
                 </div>
               </div>
@@ -1742,14 +1835,41 @@ export const AdminPortal: React.FC<Props> = ({
                 </div>
 
                 <div>
-                  <label className="block font-bold text-[#1C1917] mb-1">Cor</label>
-                  <input
-                    type="text"
-                    placeholder="Ex: Dourado claro"
-                    value={editingDog.color || ''}
-                    onChange={(e) => setEditingDog({ ...editingDog, color: e.target.value })}
-                    className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl"
-                  />
+                  <label className="block font-bold text-[#1C1917] mb-1">Cor *</label>
+                  {(editingDog.breed || '').toLowerCase().includes('chihuahua') ? (
+                    <select
+                      value={editingDog.color || 'Creme'}
+                      onChange={(e) => setEditingDog({ ...editingDog, color: e.target.value })}
+                      className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl bg-white"
+                    >
+                      {CHIHUAHUA_COLORS.map((c) => (
+                        <option key={c} value={c}>
+                          {c}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (editingDog.breed || '').toLowerCase().includes('lulu') ||
+                    (editingDog.breed || '').toLowerCase().includes('spitz') ? (
+                    <select
+                      value={editingDog.color || 'Laranja'}
+                      onChange={(e) => setEditingDog({ ...editingDog, color: e.target.value })}
+                      className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl bg-white"
+                    >
+                      {LULU_COLORS.map((c) => (
+                        <option key={c} value={c}>
+                          {c}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      type="text"
+                      placeholder="Ex: Dourado claro"
+                      value={editingDog.color || ''}
+                      onChange={(e) => setEditingDog({ ...editingDog, color: e.target.value })}
+                      className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl"
+                    />
+                  )}
                 </div>
 
                 <div>
@@ -1770,6 +1890,68 @@ export const AdminPortal: React.FC<Props> = ({
                   </select>
                 </div>
               </div>
+
+              {/* Campos específicos do Chihuahua: Tipo (Pelo Curto / Longo) e Formato (Cabeça de Maçã / Veado) */}
+              {(editingDog.breed || '').toLowerCase().includes('chihuahua') && (
+                <div className="grid grid-cols-2 gap-3 p-3 bg-[#FAFAF9] rounded-xl border border-[#E7E5E4]">
+                  <div>
+                    <label className="block font-bold text-[#1C1917] mb-1">
+                      Tipo (Pelagem Chihuahua) *
+                    </label>
+                    <select
+                      value={editingDog.coatType || 'Pelo Curto'}
+                      onChange={(e) => setEditingDog({ ...editingDog, coatType: e.target.value })}
+                      className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl bg-white"
+                    >
+                      {CHIHUAHUA_COAT_TYPES.map((t) => (
+                        <option key={t} value={t}>
+                          {t}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-[#1C1917] mb-1">
+                      Formato (Chihuahua) *
+                    </label>
+                    <select
+                      value={editingDog.headFormat || 'Cabeça de Maçã'}
+                      onChange={(e) => setEditingDog({ ...editingDog, headFormat: e.target.value })}
+                      className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl bg-white"
+                    >
+                      {CHIHUAHUA_HEAD_FORMATS.map((f) => (
+                        <option key={f} value={f}>
+                          {f}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {/* Campo específico do Lulu da Pomerânia / Spitz Alemão: Tipo Urso / Raposa / Boneca */}
+              {((editingDog.breed || '').toLowerCase().includes('lulu') ||
+                (editingDog.breed || '').toLowerCase().includes('spitz')) && (
+                <div className="p-3 bg-[#FAFAF9] rounded-xl border border-[#E7E5E4]">
+                  <label className="block font-bold text-[#1C1917] mb-1">
+                    Tipo de Lulu da Pomerânia / Spitz Alemão *
+                  </label>
+                  <select
+                    value={editingDog.coatType || 'Tipo Urso (Teddy Bear)'}
+                    onChange={(e) =>
+                      setEditingDog({ ...editingDog, coatType: e.target.value, headFormat: '' })
+                    }
+                    className="w-full px-3 py-2 border border-[#D6D3D1] rounded-xl bg-white"
+                  >
+                    {LULU_TYPES.map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               <div className="grid grid-cols-2 gap-3">
                 <div>

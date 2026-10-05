@@ -1,4 +1,9 @@
-export type DogBreed = 'Golden Retriever' | 'Bulldog Inglês' | 'Chihuahua';
+export type DogBreed =
+  | 'Golden Retriever'
+  | 'Bulldog Inglês'
+  | 'Chihuahua'
+  | 'Lulu da Pomerânia (Spitz Alemão)'
+  | string;
 
 export type DogStatus = 'Disponível' | 'Reservado' | 'Entregue';
 
@@ -10,6 +15,8 @@ export interface Dog {
   birthDate: string; // YYYY-MM-DD
   readyDate: string; // YYYY-MM-DD
   color: string;
+  coatType?: string; // Ex: Pelo Curto, Pelo Longo, Tipo Urso (Teddy Bear), Tipo Raposa (Fox Face), Tipo Boneca (Doll Face)
+  headFormat?: string; // Ex: Cabeça de Maçã, Cabeça de Veado
   price: number; // in BRL
   depositAmount: number; // in BRL (e.g. 1000 for reservation)
   status: DogStatus;

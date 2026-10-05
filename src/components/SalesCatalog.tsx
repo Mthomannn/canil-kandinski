@@ -19,9 +19,10 @@ export const SalesCatalog: React.FC<Props> = ({
 
   const breeds: { id: string; label: string }[] = [
     { id: 'all', label: 'Todas as Raças' },
+    { id: 'Chihuahua', label: 'Chihuahua' },
+    { id: 'Lulu da Pomerânia (Spitz Alemão)', label: 'Lulu da Pomerânia (Spitz)' },
     { id: 'Golden Retriever', label: 'Golden Retriever' },
     { id: 'Bulldog Inglês', label: 'Bulldog Inglês' },
-    { id: 'Chihuahua', label: 'Chihuahua' },
   ];
 
   const filteredDogs = useMemo(() => {
@@ -187,8 +188,20 @@ export const SalesCatalog: React.FC<Props> = ({
                   <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                     <div>
                       {/* Quiet Unboxed Metadata (Zero-Pill Compliance) */}
-                      <div className="flex items-center gap-1.5 text-xs text-[#78716C] mb-1.5">
+                      <div className="flex flex-wrap items-center gap-1.5 text-xs text-[#78716C] mb-1.5">
                         <span>{dog.color}</span>
+                        {dog.coatType && (
+                          <>
+                            <span aria-hidden="true">·</span>
+                            <span>{dog.coatType}</span>
+                          </>
+                        )}
+                        {dog.headFormat && (
+                          <>
+                            <span aria-hidden="true">·</span>
+                            <span>{dog.headFormat}</span>
+                          </>
+                        )}
                         <span aria-hidden="true">·</span>
                         <span>Microchip OK</span>
                         <span aria-hidden="true">·</span>

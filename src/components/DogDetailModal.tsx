@@ -52,8 +52,10 @@ export const DogDetailModal: React.FC<Props> = ({
             <h3 className="text-2xl font-serif-display font-bold leading-tight">
               {dog.name}
             </h3>
-            <p className="text-xs opacity-80 mt-0.5">
+            <p className="text-xs opacity-90 mt-0.5">
               {dog.gender} · {dog.color}
+              {dog.coatType ? ` · ${dog.coatType}` : ''}
+              {dog.headFormat ? ` · ${dog.headFormat}` : ''}
             </p>
           </div>
         </div>
