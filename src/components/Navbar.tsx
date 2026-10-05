@@ -22,76 +22,78 @@ export const Navbar: React.FC<Props> = ({
 
   return (
     <header className="sticky top-0 z-40 bg-[#FAFAF9]/95 backdrop-blur-md border-b border-[#E7E5E4] transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
-        {/* Zone 1: Single text element Brand Wordmark */}
-        <a
-          href="#"
-          className="text-xl sm:text-2xl font-serif-display font-bold tracking-tight text-[#1C1917] hover:text-[#78350F] transition-colors whitespace-nowrap"
-        >
-          {config.kennelName}
-        </a>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-6 lg:gap-10">
+        {/* Zone 1: Brand Wordmark with guaranteed left breathing room */}
+        <div className="shrink-0">
+          <a
+            href="#"
+            className="text-xl lg:text-2xl font-serif-display font-bold tracking-tight text-[#1C1917] hover:text-[#78350F] transition-colors whitespace-nowrap block pr-2"
+          >
+            {config.kennelName}
+          </a>
+        </div>
 
-        {/* Zone 2: 4-6 clean text navigation links */}
-        <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-[#44403C]">
+        {/* Zone 2: Centered, evenly distributed single-line navigation links */}
+        <nav className="hidden lg:flex flex-1 items-center justify-center gap-6 xl:gap-9 text-[13px] xl:text-sm font-medium text-[#44403C] px-4">
           <a
             href="#vendas"
-            className="hover:text-[#1C1917] transition-colors relative py-1"
+            className="hover:text-[#1C1917] transition-colors relative py-1.5 whitespace-nowrap flex items-center gap-1.5"
           >
-            Filhotes Disponíveis
+            <span>Filhotes Disponíveis</span>
             {availableCount > 0 && (
-              <span className="ml-1.5 text-xs text-[#B45309] font-mono tabular-nums">
+              <span className="text-xs text-[#B45309] font-mono font-bold tabular-nums bg-amber-50 px-1.5 py-0.5 rounded-md border border-amber-200/70">
                 ({availableCount})
               </span>
             )}
           </a>
           <a
             href="#racas"
-            className="hover:text-[#1C1917] transition-colors py-1"
+            className="hover:text-[#1C1917] transition-colors py-1.5 whitespace-nowrap"
           >
             Nossas Raças
           </a>
           <a
             href="#sobre"
-            className="hover:text-[#1C1917] transition-colors py-1"
+            className="hover:text-[#1C1917] transition-colors py-1.5 whitespace-nowrap"
           >
             O Canil & Garantias
           </a>
           <a
             href="#redes"
-            className="hover:text-[#1C1917] transition-colors py-1"
+            className="hover:text-[#1C1917] transition-colors py-1.5 whitespace-nowrap"
           >
             Comunidade & Redes
           </a>
           <a
             href="#contato"
-            className="hover:text-[#1C1917] transition-colors py-1"
+            className="hover:text-[#1C1917] transition-colors py-1.5 whitespace-nowrap"
           >
             Contato
           </a>
         </nav>
 
-        {/* Zone 3: 1-2 primary actions */}
-        <div className="hidden sm:flex items-center gap-2.5">
+        {/* Zone 3: Right-aligned primary actions with guaranteed separation */}
+        <div className="hidden sm:flex items-center justify-end gap-3 shrink-0 pl-2">
           <PWAInstallButton variant="navbar" />
           <a
             href={`https://wa.me/${cleanWhatsappNumber}?text=Olá,%20Daniela!%20Visitei%20o%20site%20do%20Canil%20Kandinski%20e%20gostaria%20de%20conversar.`}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 py-2 text-xs font-medium text-[#065F46] bg-[#ECFDF5] hover:bg-[#D1FAE5] border border-[#A7F3D0] rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap"
+            className="px-3.5 py-2 text-xs font-medium text-[#065F46] bg-[#ECFDF5] hover:bg-[#D1FAE5] border border-[#A7F3D0] rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0"
           >
-            <PhoneCall className="w-3.5 h-3.5" />
+            <PhoneCall className="w-3.5 h-3.5 shrink-0" />
             <span>WhatsApp</span>
           </a>
           <button
             onClick={onOpenSales}
-            className="px-4 py-2 text-xs font-semibold tracking-wide text-white bg-[#1C1917] rounded-lg hover:bg-[#292524] active:scale-[0.98] transition-all whitespace-nowrap shadow-xs cursor-pointer"
+            className="px-4 py-2 text-xs font-semibold tracking-wide text-white bg-[#1C1917] rounded-lg hover:bg-[#292524] active:scale-[0.98] transition-all whitespace-nowrap shadow-xs cursor-pointer shrink-0"
           >
             Reservar Online
           </button>
         </div>
 
-        {/* Mobile menu hamburger toggle */}
-        <div className="flex md:hidden items-center gap-2">
+        {/* Mobile / Tablet menu hamburger toggle */}
+        <div className="flex lg:hidden items-center gap-2 shrink-0">
           <button
             onClick={onOpenSales}
             className="px-3 py-1.5 text-xs font-semibold text-white bg-[#1C1917] rounded-md whitespace-nowrap"
@@ -108,9 +110,9 @@ export const Navbar: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile / Tablet Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-[#E7E5E4] bg-[#FAFAF9] px-4 pt-3 pb-6 space-y-3">
+        <div className="lg:hidden border-b border-[#E7E5E4] bg-[#FAFAF9] px-4 pt-3 pb-6 space-y-3">
           <nav className="flex flex-col space-y-2 text-sm font-medium text-[#292524]">
             <a
               href="#vendas"

@@ -36,10 +36,10 @@ export const PWAInstallButton: React.FC<Props> = ({ variant = 'navbar' }) => {
       {variant === 'navbar' && (
         <button
           onClick={handleInstallClick}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-amber-950 bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 rounded-full shadow-sm transition-all duration-200 active:scale-95 cursor-pointer"
+          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-amber-950 bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 rounded-lg shadow-xs transition-all duration-200 active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
           title="Instalar o aplicativo do Canil Kandinski no seu celular ou computador"
         >
-          <Smartphone className="w-3.5 h-3.5" />
+          <Smartphone className="w-3.5 h-3.5 shrink-0" />
           <span>Instalar App</span>
         </button>
       )}
